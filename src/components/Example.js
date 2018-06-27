@@ -15,8 +15,8 @@ class Example extends Component {
      method: 'get',
      url: 'https://api.intrinio.com/historical_data?identifier=QCOM&item=close_price&start_date=2017-06-13&end_date=2018-06-12&page_size=300',
      auth: {
-       username: '0a92cf3ea45d3a43b5ce258dd5c25bcf',
-       password: '279ef0263d08cf4a5d2f329d8922249f'
+       username: '',
+       password: ''
    },
      maxContentLength: 20000
  }

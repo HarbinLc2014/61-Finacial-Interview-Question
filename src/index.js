@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import Example from './components/Example';
 
-const API_KEY = 'AIzaSyDqsCmFJaxkv_vJDoNyl7b3E1MCvkVuWr0';
-
 class App extends Component {
   // get stock data
   constructor(props){
@@ -14,8 +12,8 @@ class App extends Component {
       method: 'get',
       url: 'https://api.intrinio.com/historical_data?identifier=QCOM&item=close_price&start_date=2017-06-13&end_date=2018-06-12&page_size=300',
       auth: {
-        username: '0a92cf3ea45d3a43b5ce258dd5c25bcf',
-        password: '279ef0263d08cf4a5d2f329d8922249f'
+        username: '',
+        password: ''
     },
       maxContentLength: 20000
   }
@@ -45,6 +43,24 @@ class App extends Component {
     return target;
   }
   return 0;
+  }
+
+  maxProfit(data){
+
+    var currMax = 0;
+
+    var totalMax = 0;
+
+    for(var i = 1; i < data.length; i++){
+
+        currMax = Math.max(0, currMax+data[i].value-data[i-1].value);
+
+        totalMax = Math.max(totalMax, currMax);
+
+    }
+
+    return totalMax;
+
   }
 
  // calculate the max profit gap between two days
@@ -83,6 +99,7 @@ class App extends Component {
     <br />
     <h5>Sell-out date: {this.state.data.length!=0? this.state.data[this.calculateMaxProfit(this.state.data).max].date : 0} </h5>
     <h5>close price: {this.state.data.length!=0? this.state.data[this.calculateMaxProfit(this.state.data).max].value : 0} </h5>
+    <h5>Profit: {this.state.data.length!=0? this.maxProfit(this.state.data) : 0}</h5>
     <h5>Profit: {this.state.data.length!=0? this.calculateMaxProfit(this.state.data).profit : 0}</h5>
     </div>
   );
