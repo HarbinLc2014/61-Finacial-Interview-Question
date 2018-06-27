@@ -1,25 +1,12 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import { PrismCode } from 'react-prism';
-import Highcharts from 'highcharts';
-import {HighchartsChart, Chart, withHighcharts, XAxis, YAxis, Title, Subtitle, Legend, LineSeries} from 'react-jsx-highcharts';
 import Example from './components/Example';
 
 const API_KEY = 'AIzaSyDqsCmFJaxkv_vJDoNyl7b3E1MCvkVuWr0';
-const plotOptions = {
-  series: {
-    pointStart: 2010
-  }
-};
-const chart = () => (
-  <div>
-    <pre>
-      <PrismCode className="language-jsx">{code}</PrismCode>
-    </pre>
-  </div>
-);
+
 class App extends Component {
+  // get stock data
   constructor(props){
     super(props);
     this.state = { videos: [], data: [] };
@@ -43,12 +30,7 @@ class App extends Component {
   });
   }
 
-  getTiming(data) {
-    var date = new Date(data);
-    var timer = date.getFullYear() + '-' + (date.getMonth() < 10 ? '0' + (date.getMonth()+1) : (date.getMonth()+1)) + "-" + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
-    return timer;
-  }
-
+  // get the highest close price after a specific date.
   getMax(data, index) {
     var max = 0;
     var target = 0;
@@ -65,6 +47,7 @@ class App extends Component {
   return 0;
   }
 
+ // calculate the max profit gap between two days
   calculateMaxProfit(data) {
     var profit = 0;
     var date = '';
@@ -76,20 +59,20 @@ class App extends Component {
       for (var i=0; i<data.length; i++){
           max = this.getMax(data,i);
           var re1 = data[max].value-data[i].value;
-        //  console.log(re1);
+
           if(re1>profit){
             profit = re1;
             target2 = max;
             target1 = i;
           }
         }
-        console.log(target1);
-        console.log(target2);
+
         return {min: target1, max: target2, profit: data[target2].value-data[target1].value};
       }
       return [0,0]
   }
 
+//  render the result
   render() {
   return (
     <div>
@@ -105,6 +88,5 @@ class App extends Component {
   );
   }
 }
-// create a component
 
 ReactDOM.render(<App />, document.querySelector('.container'));

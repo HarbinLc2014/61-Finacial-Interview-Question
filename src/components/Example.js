@@ -4,33 +4,13 @@ import axios from 'axios';
 import { HighchartsChart, Chart, withHighcharts, XAxis, YAxis, Title, Subtitle, Legend, LineSeries } from 'react-jsx-highcharts';
 
 const plotOptions = {
-  series: [{
-    type: 'spline',
-    id: 'my-series',
-    data: [1,2,3,4,5,6,7,8]
-  }]
-};
-const createDataPoint = (time = Date.now(), magnitude = 1000, offset = 0) => {
-  return [
-    time + offset * magnitude,
-    Math.round((Math.random() * 100) * 2) / 2
-  ];
-};
-
-const createRandomData = (time, magnitude, points = 100) => {
-  const data = [];
-  let i = (points * -1) + 1;
-  for (i; i <= 0; i++) {
-    data.push(createDataPoint(time, magnitude, i));
-  }
-  return data;
 };
 
 class Example extends Component {
-
+  // use axios to get stock data
   constructor (props) {
    super(props);
-   this.state = { videos: [], data: [], formattedData: [] };
+   this.state = { data: [], formattedData: [] };
    axios({
      method: 'get',
      url: 'https://api.intrinio.com/historical_data?identifier=QCOM&item=close_price&start_date=2017-06-13&end_date=2018-06-12&page_size=300',
@@ -41,7 +21,6 @@ class Example extends Component {
      maxContentLength: 20000
  }
 ).then((response)=> {
-   console.log(new Date(response.data.data[0].date).getTime());
 
    this.setState({
      data: response.data.data,
@@ -53,6 +32,7 @@ class Example extends Component {
  });
  }
 
+ // format the origin data from date format to Unix time stamp
  formatData(data) {
    var formatteddata = [];
    var length = data.length;
@@ -64,34 +44,14 @@ class Example extends Component {
    return formatteddata;
  }
 
-  createDataPoint(time = Date.now(), magnitude = 1000, offset = 0) {
-   return [
-     time + offset * magnitude,
-     Math.round((Math.random() * 100) * 2) / 2
-   ];
- }
-
-  createRandomData(time, magnitude, points = 100) {
-   const data = [];
-   let i = (points * -1) + 1;
-   for (i; i <= 0; i++) {
-     data.push(createDataPoint(time, magnitude, i));
-   }
-   return data;
- }
- createRandomSeries (index) {
-    return {
-      name: `Series${index}`,
-      data: createRandomData(this.state.now, 1e8)
-    };
-  }
+// render chart
   render() {
     return (
   <div className="app">
     <HighchartsChart plotOptions={plotOptions}>
       <Chart />
 
-      <Title>Stock Close Price Line Graph, 2017 Jun - 2018 Jun</Title>
+      <Title>Stock Close Price Line Chart, 2017 Jun - 2018 Jun</Title>
 
       <Subtitle>Source: http://docs.intrinio.com/#historical-data </Subtitle>
 
